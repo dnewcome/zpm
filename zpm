@@ -1,37 +1,72 @@
 #!/bin/bash
+
 # zpm - zero package manager
 # zero config, treat any dir like a package
-# config optional to override defaults 
 
 
-# args: 
-# executable
-
-if [ $# -ne 1 ]
-then
-	# should have one arg
-	echo 'usage: $0 <executable>'
-	exit 1;
-fi
-
-if [ $1 -e "install" ]
-then
-	# should have one arg
-	echo 'usage: $0 <executable>'
-	exit 1;
-fi
-
-function install() {
-if [ ! -d ~/.zpm ]; then
-	mkdir ~/.zpm
-fi
-
-if [ ! -d ~/binn ]; then
-	mkdir ~/bin
-fi
-
-BASE_NAME=$(basename $PWD)
-
-cp -r `pwd` ~/.zpm/
-ln -s ~/.zpm/$BASE_NAME/$1 ~/bin
+# no arguments
+function list() {
+	ls ~/.zpm
 }
+
+# $1 - package (folder) name
+# #2 - symlink name
+function remove() {
+
+	echo removing $1
+
+	# remove from cache
+	rm -rf ~/.zpm/$1
+
+	# remove symlink
+	rm ~/bin/$2
+}
+
+# $1 exectuable name 
+function install() {
+	if [ ! -d ~/.zpm ]; then
+		mkdir ~/.zpm
+	fi
+
+	if [ ! -d ~/bin ]; then
+		mkdir ~/bin
+	fi
+
+	BASE_NAME=$(basename $PWD)
+
+	cp -r `pwd` ~/.zpm/
+	ln -s ~/.zpm/$BASE_NAME/$1 ~/bin
+}
+
+if [ $# -eq 0 ]
+then
+	echo "usage: $0 <command> <args>"
+	exit 1;
+fi
+
+if [[ "$1" == "install" ]]
+then
+	if [ $# -lt 2 ]
+		then
+			echo "usage: $0 install <executable>"
+			exit 1;
+		else
+		install	$2
+	fi
+fi
+
+if [ "$1" == "remove" ]
+then
+	if [ $# -lt 3 ]
+		then
+			echo "usage: $0 remove <package> <symlink>"
+			exit 1;
+		else
+		remove $2 $3	
+	fi
+fi
+
+if [ "$1" == "list" ]
+then
+	list	
+fi
