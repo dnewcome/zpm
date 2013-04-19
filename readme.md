@@ -26,6 +26,13 @@ name must be given on the command line. zpm should get smarter about this in the
 
 The list command simply lists the contents of the ~/.zpm directory.
 
+# Philosophy
+
+zpm is an experiment in un-package management. The goal is to enable deployment of 
+experimental code during development. Instead of linking directly to the working directory
+zpm enables you to push a snapshot of the directory to a well-known location and maintain
+symlinks easily.
+
 # Future work
 
 I intend to allow optional configuration 'hints' to control the operation of zpm. 
