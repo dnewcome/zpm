@@ -5,10 +5,20 @@ zpm is designed for excellent isolation and conflict avoidance. zpm is just a sh
 well-known posix commands to work. Anything that zpm does you can do/undo using commands available
 on your system.
 
+# Installing
+
+zpm can install itself:
+
+    $ cd zpm
+    $ ./zpm install zpm
+
+Boom.
+
 # Usage
 
 zpm has only three commands - install, remove and list. Packages are installed to ~/.zpm
 and symlinks are created in ~/bin.
+
 
 ## zpm install
 
