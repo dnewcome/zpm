@@ -34,11 +34,9 @@ function install() {
 
 	BASE_NAME=$(basename $PWD)
 
-	# cp -r `pwd` ~/.zpm/
 	# todo: use tar -X <file> for excludefile
 	FOLDER=`basename "$PWD"`
 	(cd ..; tar -c --exclude=".git" "$FOLDER" | tar -x -C ~/.zpm/)
-
 	ln -s ~/.zpm/$BASE_NAME/$1 ~/bin
 }
 
