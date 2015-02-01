@@ -34,17 +34,20 @@ function install() {
 
 	BASE_NAME=$(basename $PWD)
 
-	cp -r `pwd` ~/.zpm/
+	# cp -r `pwd` ~/.zpm/
+	# todo: use tar -X <file> for excludefile
+	FOLDER=`basename "$PWD"`
+	(cd ..; tar -c --exclude=".git" "$FOLDER" | tar -x -C ~/.zpm/)
+
 	ln -s ~/.zpm/$BASE_NAME/$1 ~/bin
 }
 
 if [ $# -eq 0 ]
 then
-	echo "usage: $0 <command> <args>"
+	echo "usage: $0 { install | remove | list } [ args ]"
 	exit 1;
-fi
 
-if [[ "$1" == "install" ]]
+elif [[ "$1" == "install" ]]
 then
 	if [ $# -lt 2 ]
 		then
@@ -53,9 +56,8 @@ then
 		else
 		install	$2
 	fi
-fi
 
-if [ "$1" == "remove" ]
+elif [ "$1" == "remove" ]
 then
 	if [ $# -lt 3 ]
 		then
@@ -64,9 +66,12 @@ then
 		else
 		remove $2 $3	
 	fi
-fi
 
-if [ "$1" == "list" ]
+elif [ "$1" == "list" ]
 then
 	list	
+
+else
+	echo "usage: $0 { install | remove | list } [ args ]"
 fi
+
