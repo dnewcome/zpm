@@ -3,55 +3,52 @@
 # zpm - zero package manager
 # zero config, treat any dir like a package
 
+source .zpm
 
-# no arguments
+version=${version:=`date +"%s"`}
+bin=${bin:-$1}
+name=${name:-`basename "$PWD"`}
+srcdir=`basename "$PWD"`
+dstdir=${name:-$srcdir}
+
 function list() {
 	ls ~/.zpm
 }
 
-# $1 - package (folder) name
-# #2 - symlink name
 function remove() {
-
-	echo removing $1
-
-	# remove from cache
-	rm -rf ~/.zpm/$1
-
-	# remove symlink
-	rm ~/bin/$2
+	echo remove is not supported yet
 }
 
 # $1 exectuable name 
 function install() {
-	if [ ! -d ~/.zpm ]; then
-		mkdir ~/.zpm
-	fi
+	echo installing to "~/.zpm/$dstdir/$version"
+	mkdir -p ~/.zpm/"$dstdir"/"$version"
 
 	if [ ! -d ~/bin ]; then
 		mkdir ~/bin
 	fi
 
-	BASE_NAME=$(basename $PWD)
-
 	# todo: use tar -X <file> for excludefile
+	tar -c --exclude=".git" * | tar -x -C ~/.zpm/"$dstdir"/"$version"
+	ln -s -f ~/.zpm/"$dstdir"/"$version"/"$bin" ~/bin/"$bin"
+}
+
+function create() {
 	FOLDER=`basename "$PWD"`
-	(cd ..; tar -c --exclude=".git" "$FOLDER" | tar -x -C ~/.zpm/)
-	ln -s ~/.zpm/$BASE_NAME/$1 ~/bin
+	(cd ..; tar -czf "$srcdir/$srcdir.tgz" --exclude=".git" --exclude="$srcdir.tgz" "$srcdir")
 }
 
 if [ $# -eq 0 ]
 then
-	echo "usage: $0 { install | remove | list } [ args ]"
+	echo "usage: $0 { install | remove | list | create | hints } [ args ]"
 	exit 1;
 
 elif [[ "$1" == "install" ]]
 then
-	if [ $# -lt 2 ]
-		then
-			echo "usage: $0 install <executable>"
-			exit 1;
-		else
+	if [ -z $bin ]; then 
+		echo "usage: $0 install <executable>"
+		exit 1;
+	else
 		install	$2
 	fi
 
@@ -69,7 +66,21 @@ elif [ "$1" == "list" ]
 then
 	list	
 
+# list configuration from hints
+elif [ "$1" == "hints" ]
+then
+	echo bin is $bin
+	echo name is $name
+	echo version is $version
+	echo source dir is $srcdir
+	echo dest dir is $dstdir
+	echo binary will be "~/.zpm/$dstdir/$version/$1" 
+
+elif [ "$1" == "create" ]
+then
+	create	
+
 else
-	echo "usage: $0 { install | remove | list } [ args ]"
+	echo "usage: $0 { install | remove | list | create | hints } [ args ]"
 fi
 
