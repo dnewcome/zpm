@@ -15,10 +15,6 @@ function list() {
 	ls ~/.zpm
 }
 
-function remove() {
-	echo remove is not supported yet
-}
-
 # $1 exectuable name 
 function install() {
 	echo installing to "~/.zpm/$dstdir/$version"
@@ -29,37 +25,19 @@ function install() {
 	fi
 
 	# todo: use tar -X <file> for excludefile
-	tar -c --exclude=".git" * | tar -x -C ~/.zpm/"$dstdir"/"$version"
+	tar -c --exclude=".git" . | tar -x -C ~/.zpm/"$dstdir"/"$version"
 	ln -s -f ~/.zpm/"$dstdir"/"$version"/"$bin" ~/bin/"$bin"
 }
 
-function create() {
-	FOLDER=`basename "$PWD"`
-	(cd ..; tar -czf "$srcdir/$srcdir.tgz" --exclude=".git" --exclude="$srcdir.tgz" "$srcdir")
-}
 
-if [ $# -eq 0 ]
+if [[ "$1" == "install" ]]
 then
-	echo "usage: $0 { install | remove | list | create | hints } [ args ]"
-	exit 1;
-
-elif [[ "$1" == "install" ]]
-then
-	if [ -z $bin ]; then 
+	if [ -z $bin ];
+	then 
 		echo "usage: $0 install <executable>"
 		exit 1;
 	else
 		install	$2
-	fi
-
-elif [ "$1" == "remove" ]
-then
-	if [ $# -lt 3 ]
-		then
-			echo "usage: $0 remove <package> <symlink>"
-			exit 1;
-		else
-		remove $2 $3	
 	fi
 
 elif [ "$1" == "list" ]
@@ -69,6 +47,7 @@ then
 # list configuration from hints
 elif [ "$1" == "hints" ]
 then
+	echo description is $desc
 	echo bin is $bin
 	echo name is $name
 	echo version is $version
@@ -76,11 +55,7 @@ then
 	echo dest dir is $dstdir
 	echo binary will be "~/.zpm/$dstdir/$version/$1" 
 
-elif [ "$1" == "create" ]
-then
-	create	
-
 else
-	echo "usage: $0 { install | remove | list | create | hints } [ args ]"
+	echo "usage: $0 { install | list | hints } [ args ]"
 fi
 
