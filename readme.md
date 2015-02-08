@@ -41,10 +41,10 @@ information where zpm plans on installing things. It's a good sanity check to ru
 
 ### supported hints:
 
-version - sets a version number, if no version zpm will use epoch timestamp
-bin - name of the bin entrypoint of the package, and also symlink name
-name - name of the project, used as installation folder under ~/.zpm
-desc - human readable description of the package. Not used by zpm currently
+- version - sets a version number, if no version zpm will use epoch timestamp
+- bin - name of the bin entrypoint of the package, and also symlink name
+- name - name of the project, used as installation folder under ~/.zpm
+- desc - human readable description of the package. Not used by zpm currently
 
 
 # Philosophy
