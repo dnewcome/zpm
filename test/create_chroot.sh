@@ -1,5 +1,6 @@
 # via
 # http://linuxtoosx.blogspot.com/2010/09/building-chroot-environment-for-sftp.html
+# code retains copyright Gabriele Facciolo
 
 #!/bin/bash
 #
@@ -60,3 +61,5 @@ cp /usr/lib/libauto.dylib ./usr/lib/
 cp /usr/lib/libc++abi.dylib ./usr/lib/
 cp /usr/lib/libdiagnosticMessages.dylib ./usr/lib/
 cp /usr/lib/libDiagnosticMessagesClient.dylib ./usr/lib
+
+
